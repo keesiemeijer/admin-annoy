@@ -8,6 +8,74 @@
 		$( el ).css( 'z-index', '1000' );
 	}
 
+
+	function link_chaos( el ) {
+		var links = el.find( 'a' ),
+			link_attr = [];
+
+		links.each( function( index ) {
+			var href = $( this ).attr( 'href' );
+			var text = $( this ).text();
+			link_attr[ index ] = {
+				text: text,
+				href: href
+			};
+		} );
+
+		var elements = ( admin_annoy.level / 100 ) * links.length;
+
+		links = shuffle( links ).slice( 0, elements );
+		link_attr = shuffle( link_attr ).slice( 0, elements );
+
+		links.each( function( index ) {
+			var target = $( this ).find( '.wp-menu-name' );
+
+			if ( !target.length ) {
+				target = $( this ).find( '.ab-label' );
+			}
+
+			if ( !target.length ) {
+				target = $( this );
+			}
+
+			// 1 switch href and text
+			// 2 switch href only
+			// 3 switch text only
+
+			switch ( Math.floor( Math.random() * 3 ) + 1 ) {
+				case 1:
+					target.text( link_attr[ index ][ 'text' ] );
+					target.attr( 'href', link_attr[ index ][ 'href' ] );
+					break;
+				case 2:
+					target.attr( 'href', link_attr[ index ][ 'href' ] );
+					break;
+				case 3:
+					target.text( link_attr[ index ][ 'text' ] );
+			}
+		} );
+	}
+
+	function shuffle( array ) {
+		var m = array.length,
+			t, i;
+
+		// While there remain elements to shuffle…
+		while ( m ) {
+
+			// Pick a remaining element…
+			i = Math.floor( Math.random() * m-- );
+
+			// And swap it with the current element.
+			t = array[ m ];
+
+			array[ m ] = array[ i ];
+			array[ i ] = t;
+		}
+
+		return array;
+	}
+
 	$( document ).ready( function() {
 
 		if ( typeof admin_annoy === 'undefined' ) {
@@ -18,12 +86,29 @@
 			return;
 		}
 
+		//console.log( admin_annoy );
+
 		var admin_menu = $( '#adminmenu' ),
 			admin_bar = $( '#wpadminbar' ),
 			screen_links = $( '#screen-meta-links' ),
 			screen_meta = $( '#screen-meta' ),
 			wpbody = $( '#wpbody' ),
 			wpwrap = $( '#wpwrap' );
+
+		if ( admin_annoy.nav_links ) {
+			switch ( Math.floor( Math.random() * 3 ) + 1 ) {
+				case 1:
+					link_chaos( admin_menu );
+					break;
+				case 2:
+					link_chaos( admin_bar );
+					break;
+				case 3:
+					link_chaos( admin_menu );
+					link_chaos( admin_bar );
+			}
+
+		}
 
 		if ( admin_annoy.sidebar ) {
 
@@ -67,7 +152,7 @@
 			e.preventDefault();
 		} );
 
-		var elements = $( 'input:visible,a,select,textarea,button', wpbody ).filter( function() {
+		var elements = $( 'input:visible,a,select,textarea,button,img', wpbody ).filter( function() {
 			return $( this ).parents( '#contextual-help-wrap' ).length < 1;
 		} );
 

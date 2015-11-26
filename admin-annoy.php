@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Admin Annoy
-Version: 1.0.0-alpha
+Version: 1.0.1-alpha
 Plugin URI:
 Description: Agitate html elements in the wp-admin.
 Author: keesiemijer
@@ -29,6 +29,9 @@ add_action( 'admin_enqueue_scripts', 'admin_annoy_enqueue_scripts', 99 );
 
 function admin_annoy_enqueue_scripts() {
 
+	if(is_customize_preview ()) {
+		return;
+	}
 
 	$plugin_screen = apply_filters( 'admin_annoy_plugin_screen_do_annoy', false);
  
@@ -63,19 +66,25 @@ function admin_annoy_enqueue_scripts() {
 		return;
 	}
 
-	$agitate_level = absint( apply_filters( 'admin_annoy_agitate_percentage', 100 ) );
+	// how many elments shoul by annoying.
+	$agitate_level = absint( apply_filters( 'admin_annoy_annoyance_percentage', 60 ) );
 
 	if ( !$agitate_level || $agitate_level > 100 ) {
 		$agitate_level = 50;
 	}
 
-	$js_vars = array(
+	// elements to annoy
+	$annoy_elements = array(
 		'sidebar' => mt_rand( 1, 100 ) <= $agitate_level ? true : false,
 		'toolbar' => mt_rand( 1, 100 ) <= $agitate_level ? true : false,
-		'level'   => $agitate_level,
+		'nav_links'   => mt_rand( 1, 100 ) <= $agitate_level ? true : false,	
 	);
 
-	wp_register_script( 'admin-annoy-js', plugin_dir_url( __FILE__ ) . 'admin-annoy.min.js',  array( 'jquery', 'jquery-effects-slide', 'underscore' ), false, true );
+	$js_vars          = apply_filters( 'admin_annoy_elements', $annoy_elements, $user_id );
+	$js_vars          = array_merge($annoy_elements, (array) $js_vars );
+	$js_vars['level'] = $agitate_level;
+
+	wp_register_script( 'admin-annoy-js', plugin_dir_url( __FILE__ ) . 'admin-annoy.js',  array( 'jquery', 'jquery-effects-slide', 'underscore' ), false, true );
 	wp_enqueue_script( 'admin-annoy-js' );
 
 	wp_localize_script( 'admin-annoy-js', 'admin_annoy', $js_vars );
