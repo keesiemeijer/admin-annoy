@@ -24,7 +24,8 @@ function full_annoyance( $percentage ){
 ```
 
 ## Set a date for the annoyance
-Set the date for when to annoy with the `admin_annoy_date` filter. Default none
+Set the date for when to annoy with the `admin_annoy_date` filter. Default none.
+
 Example of april first.
 ```php
 add_filter('admin_annoy_date', 'april_fools' );
@@ -37,7 +38,7 @@ function april_fools( $percentage ){
 ```
 
 ## Only annoy a specific user
-Set the user id to annoy with the `admin_annoy_user_id` filter. Default none
+Set the user id to annoy with the `admin_annoy_user_id` filter. Default none.
 
 Example to only annoy a user with id 23.
 ```php
