@@ -3,7 +3,7 @@
 Plugin Name: Admin Annoy
 Version: 1.0.1-alpha
 Plugin URI:
-Description: Agitate html elements in the wp-admin.
+Description: A prank WordPress plugin to give yourself, or a "friend", a very annoying WordPress dashboard experience.
 Author: keesiemijer
 Author URI:
 License: GPL v2+
