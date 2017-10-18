@@ -1,12 +1,14 @@
 # Admin Annoy
 
-Version:           1.0.1-alpha 
+Version:           1.0
 Requires at least: 4.0  
-Tested up to:      4.3
+Tested up to:      4.8
 
 A prank WordPress plugin to give yourself, or a "friend", a very annoying WordPress dashboard experience.
 
-Activate the plugin and go to any other admin page to experience the destructive nature of this plugin.
+[100% annoyance demo page](https://keesiemeijer.github.io/admin-annoy/wp-admin/)
+
+Activate the plugin and go to any other admin page and experience the frustration (or joy) this plugin will bring you.
 
 To deactivate this plugin go to this admin url `/wp-admin/plugins.php` and deactivate it. 
 
