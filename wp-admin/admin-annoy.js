@@ -1,9 +1,34 @@
 ( function( $ ) {
 
+	function get_position( el ) {
+		var left = el.style.left;
+		var top = el.style.top
+		if ( left && top ) {
+			return { 'top': parseInt( top, 10 ), 'left': parseInt( left, 10 ) };
+		}
+		return false;
+	}
+
 	function annoy( el ) {
+		var diff = 30;
+		var pos = get_position( el )
+		var left = Math.random() * 300;
+		var top = Math.random() * 300;
+
+		if ( pos ) {
+			top_diff = Math.abs( pos.top - top );
+			if ( diff > top_diff ) {
+				if ( top < pos.top ) {
+					top = ( 0 < ( top - diff ) ) ? ( top - diff ) : ( pos.top + diff );
+				} else {
+					top = top + diff;
+				}
+			}
+		}
+
 		$( el ).stop().animate( {
-			left: ( Math.random() * 300 ),
-			top: ( Math.random() * 300 ),
+			left: left,
+			top: top,
 		}, 130 );
 		$( el ).css( 'z-index', '1000' );
 	}
