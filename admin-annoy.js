@@ -1,17 +1,41 @@
 ( function( $ ) {
-	var height=1;
+	var wpWrapHeight = 1;
+	var welcomePanelHeight = 1;
+	var wpWrap;
+	var wpWelcome;
 
 	function get_position( el ) {
 		var left = el.style.left;
-		var top = el.style.top
+		var top = el.style.top;
 		if ( left && top ) {
 			return { 'top': parseInt( top, 10 ), 'left': parseInt( left, 10 ) };
 		}
 		return false;
 	}
 
+	function setHeight( el, globalHeight ) {
+		if ( !el.length ) {
+			return globalHeight;
+		}
+
+		var curr_height = $( el )[ 0 ].scrollHeight;
+		globalHeight = globalHeight ? globalHeight : curr_height;
+		if ( globalHeight ) {
+			if ( curr_height > globalHeight ) {
+				$( el ).height( curr_height );
+			}
+		}
+
+		return globalHeight;
+	}
+
 	function annoy( el ) {
-		var diff = 30;
+		if ( !el ) {
+			return;
+		}
+
+		var el_height = $( el )[ 0 ].scrollHeight;
+		var diff = el_height + 30;
 		var pos = get_position( el );
 		var left = Math.random() * 300;
 		var top = Math.random() * 300;
@@ -33,13 +57,10 @@
 		}, 125 );
 		$( el ).css( 'z-index', '1000' );
 
-		var curr_height = wpwrap.scrollHeight;
-		height = height ? height : curr_height;
-		if( height ) {
-			if (curr_height > height) {
-				$(wpwrap).height(curr_height);
-			}
-		}
+		// Change parent elements when moving outside.
+		wpWrapHeight = setHeight( wpWrap, wpWrapHeight );
+		welcomePanelHeight = setHeight( wpWelcome, welcomePanelHeight );
+
 	}
 
 	function link_chaos( el ) {
@@ -125,8 +146,10 @@
 			admin_bar = $( '#wpadminbar' ),
 			screen_links = $( '#screen-meta-links' ),
 			screen_meta = $( '#screen-meta' ),
-			wpbody = $( '#wpbody' ),
-			wpwrap = $( '#wpwrap' );
+			wpbody = $( '#wpbody' );
+
+		wpWrap = $( '#wpwrap' );
+		wpWelcome = $( '.welcome-panel-content' );
 
 		if ( admin_annoy.nav_links ) {
 			switch ( Math.floor( Math.random() * 3 ) + 1 ) {
@@ -171,7 +194,7 @@
 			} );
 		}
 
-		wpwrap.on( "mousemove touchstart", _.debounce( function( e ) {
+		wpWrap.on( "mousemove touchstart", _.debounce( function( e ) {
 			if ( admin_bar.is( ":hidden" ) && ( e.clientY > 31 ) ) {
 				admin_bar.show( "slide", {
 					direction: "up"
