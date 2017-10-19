@@ -1,4 +1,5 @@
 ( function( $ ) {
+	var height=1;
 
 	function get_position( el ) {
 		var left = el.style.left;
@@ -11,7 +12,7 @@
 
 	function annoy( el ) {
 		var diff = 30;
-		var pos = get_position( el )
+		var pos = get_position( el );
 		var left = Math.random() * 300;
 		var top = Math.random() * 300;
 
@@ -29,10 +30,17 @@
 		$( el ).stop().animate( {
 			left: left,
 			top: top,
-		}, 130 );
+		}, 125 );
 		$( el ).css( 'z-index', '1000' );
-	}
 
+		var curr_height = wpwrap.scrollHeight;
+		height = height ? height : curr_height;
+		if( height ) {
+			if (curr_height > height) {
+				$(wpwrap).height(curr_height);
+			}
+		}
+	}
 
 	function link_chaos( el ) {
 		var links = el.find( 'a' ),
